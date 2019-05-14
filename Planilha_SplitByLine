@@ -1,0 +1,39 @@
+Sub Custo_Cedidos()
+'
+' Cria as subpasta "Outros cedidos" e separa o custo por pessoa, gerando um arquivo por pessoa
+'
+    Dim i As Integer
+    Dim LastRow As Integer
+    Dim path As String
+    Dim Mybook As Workbook
+    Dim newbook As Workbook     ' this is the opened template
+'
+ Application.ScreenUpdating = False
+ Application.DisplayAlerts = False
+' Application.StatusBar = ActiveWorkbook.Path
+  Set Mybook = ActiveWorkbook
+  
+ path = ActiveWorkbook.path & "\Outros Cedidos"
+ LastRow = Mybook.ActiveSheet.UsedRange.Rows(ActiveSheet.UsedRange.Rows.count).Row
+  MkDir (path)
+  
+ For i = 2 To LastRow
+    Set newbook = Workbooks.Add
+     With newbook
+'     Mybook.ActiveSheet.Rows("1").Copy
+'     .ActiveSheet.Range("A1").Select
+'     .ActiveSheet.Paste
+        Mybook.ActiveSheet.Rows("1").Copy .ActiveSheet.Rows("1")
+        Mybook.ActiveSheet.Rows(i).Copy .ActiveSheet.Rows("2")
+'        .Sheets("Plan3").Delete
+'        .Sheets("Plan2").Delete
+        Cells.EntireColumn.AutoFit
+        .SaveAs FileName:=path & "\" & Range("A2").value & " - " & Range("B2").value & ".xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+        .Close Savechanges:=False
+    End With
+     
+ Next i
+  
+ Application.DisplayAlerts = True
+ Application.ScreenUpdating = True
+End Sub
