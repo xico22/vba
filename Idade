@@ -1,0 +1,5 @@
+Public Function Idade(ByVal data_ini As Date, ByVal data_fim As Date) As Integer
+ Dim aux As Integer, aux1 As Integer
+ aux = 12 * (Year(data_fim) - Year(data_ini)) + (Month(data_fim) - Month(data_ini))
+ Idade = Int(aux / 12)
+End Function
