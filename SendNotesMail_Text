@@ -45,6 +45,18 @@ Sub EnviarEmailViaNotes(receptor, nome, v1, v2, v3, v4)
         .AppendText CStr(nome)
         .AddNewLine (2)
         .AppendText "Vim só testar"
+        .AddNewLine
+        .AppendText "V1 de "
+        .AppendText Format(v1, "Currency")
+        .AddNewLine
+        .AppendText "V2 de "
+        .AppendText Format(v2, "Currency")
+        .AddNewLine
+        .AppendText "V3 de "
+        .AppendText Format(v3, "Currency")
+        .AddNewLine
+        .AppendText "V4 de "
+        .AppendText Format(v4, "Currency")
     End With
     
     'Envia o e-mail
