@@ -1,0 +1,52 @@
+Sub RMNR_Tabelas_Linha()
+'
+' Macro7 Macro
+'
+Dim wb, ws As Worksheet
+Dim cwb, cws As Range
+Dim WS_Count As Integer
+Dim B As Integer
+
+WS_Count = ActiveWorkbook.Worksheets.count
+
+Set wb = ActiveWorkbook.Worksheets("Planilha2")
+
+For B = 2 To WS_Count
+    Sheets(B).Select
+    Set ws = ActiveWorkbook.ActiveSheet
+    Set cws = ws.Range("A11")
+    Dim LastRow As Long
+    With ws
+        LastRow = WorksheetFunction.CountA(.Range("A:A")) - WorksheetFunction.CountA(.Range("A1:A10")) - 1
+    End With
+    wb.Activate
+
+    With Application.WorksheetFunction
+        Cells(.CountA(Columns("A:A")) + 1, 1).Select
+    End With
+   
+    Set cwb = ActiveCell
+
+
+
+    For i = 0 To LastRow
+        cwb.Offset(i, 0) = cws.Offset(i, 0)
+        cwb.Offset(i, 1) = "A"
+        cwb.Offset(i, 2) = ws.Name
+        cwb.Offset(i, 3) = cws.Offset(i, 1)
+        cwb.Offset(i, 4) = cws.Offset(i, 4)
+        cwb.Offset(i, 5) = cws.Offset(i, 7)
+    
+        cwb.Offset(i + LastRow + 1, 0) = cws.Offset(i, 0)
+        cwb.Offset(i + LastRow + 1, 1) = "B"
+        cwb.Offset(i + LastRow + 1, 2) = ws.Name
+        cwb.Offset(i + LastRow + 1, 3) = cws.Offset(i, 2)
+        cwb.Offset(i + LastRow + 1, 4) = cws.Offset(i, 5)
+        cwb.Offset(i + LastRow + 1, 5) = cws.Offset(i, 8)
+    Next
+      
+    ws.Activate
+
+Next
+
+End Sub
