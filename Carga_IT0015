@@ -1,0 +1,6 @@
+'Função para dar varga no IT0015
+'Exemplo de formula "=fcarga(A2;2662;B2;"10.05.2019")"
+
+Function fcarga(matricula, rubrica, valor, data)
+    fcarga = Format(matricula, "00000000") & rubrica & Format(valor, "0000000000.00") & data
+End Function
