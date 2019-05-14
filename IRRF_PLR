@@ -1,0 +1,33 @@
+'Calcula o valor do imposto de renda pago sobre a PLR (valor bruto do ano)
+
+Function plrirrf(valor As Currency) As Currency
+  Dim aux As Currency
+  Dim aux2 As Range
+  valor = Round(valor, 2)
+  Application.ThisCell.Style = "Comma"
+    Select Case valor
+        Case Is < "6677,56"
+            plrirrf = "0"
+            Exit Function
+        Case Is < "9922,29"
+            aux = "7,5"
+            plrirrf = Round((valor * aux / 100) - "500,82", 2)
+            'plrirrf = "7,5"
+            Exit Function
+        Case Is < "13167,01"
+            aux = "15"
+            plrirrf = Round((valor * aux / 100) - "1244,99", 2)
+            'plrirrf = "15"
+            Exit Function
+        Case Is < "16380,39"
+            aux = "22,5"
+            plrirrf = Round((valor * aux / 100) - "2232,51", 2)
+            'plrirrf = "22,5"
+            Exit Function
+        Case Is > "16380,38"
+            aux = "27,5"
+            plrirrf = Round((valor * aux / 100) - "3051,53", 2)
+            'plrirrf = "27,5"
+            Exit Function
+    End Select
+End Function
