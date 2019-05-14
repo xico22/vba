@@ -1,0 +1,163 @@
+Sub ReajusteRMNR()
+    
+    Dim fReajuste As Double
+    Dim fsbReajuste As Double
+    Dim Padrao As Double
+    Dim usr_Date As Date
+    Dim tempResponse As Variant
+    Dim Mensagem, Titulo
+    Dim faixa As Range
+    Dim varSheet As Variant, NN As Variant
+    Dim i As Integer
+        
+    Application.ScreenUpdating = False
+    
+    Mensagem = "Digite o valor do reajuste do salario basico!"
+    Titulo = "InputBox somar valores - "
+    Padrao = "1,000"
+     
+    On Error GoTo errosbx
+    fsbReajuste = CCur(InputBox(Mensagem, Titulo, Padrao, 1))
+    
+    Mensagem = "Digite o valor do reajuste da RMNR!"
+    Titulo = "InputBox somar valores - "
+    Padrao = "1,000"
+     
+    On Error GoTo errosbx
+    fReajuste = CCur(InputBox(Mensagem, Titulo, Padrao, 1))
+
+ShowDateBox:
+    tempResponse = InputBox("Please enter date.", "Date Required", Format(Now(), "dd/mm/yyyy"))
+
+    If tempResponse = "" Then Exit Sub
+    If IsDate(tempResponse) = False Then GoTo ShowDateBox
+    usr_Date = tempResponse
+    
+    For Each varSheet In Sheets
+        NN = varSheet.Name
+        Worksheets(NN).Activate
+        If Range("A3").value = "Ajuste" Then
+            Range("L3").value = usr_Date
+            Range("B3").value = fsbReajuste 'Escreve o novo valor de reajuste
+            Range("B3").Select
+            Selection.Copy
+'           Reajuste Area 1 - Nivel A
+               Range("D8").Select
+               Range(Selection, Selection.End(xlDown)).Select
+               Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+              SkipBlanks:=False, Transpose:=False
+              Range("D8").Select
+                With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "D").End(xlUp).Row
+                End With
+                For i = 8 To LastRow
+                Range("D" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+'           Reajuste Area 1 - Nivel B
+               Range("F8").Select
+               Range(Selection, Selection.End(xlDown)).Select
+               Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+             SkipBlanks:=False, Transpose:=False
+             Range("F8").Select
+                With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "F").End(xlUp).Row
+                End With
+                For i = 8 To LastRow
+                Range("F" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+            Range("A1").Select
+        End If
+        If Range("A6").value = "Ajuste" Then
+            Range("N6").value = usr_Date
+            Range("B6").value = fReajuste 'Escreve o novo valor de reajuste
+            Range("B6").Select
+            Selection.Copy
+'           Reajuste Area 1 - Nivel A
+               Range("B11").Select
+               Range(Selection, Selection.End(xlDown)).Select
+               Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+              SkipBlanks:=False, Transpose:=False
+                Range("B11").Select
+                With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "B").End(xlUp).Row
+                End With
+                For i = 11 To LastRow
+                Range("B" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+'           Reajuste Area 1 - Nivel B
+               Range("D11").Select
+               Range(Selection, Selection.End(xlDown)).Select
+               Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+             SkipBlanks:=False, Transpose:=False
+                Range("D11").Select
+                With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "D").End(xlUp).Row
+                End With
+                For i = 11 To LastRow
+                Range("D" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+'           Reajuste Area 2 - Nivel A
+                Range("G11").Select
+                Range(Selection, Selection.End(xlDown)).Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+             SkipBlanks:=False, Transpose:=False
+             Range("G11").Select
+             With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "G").End(xlUp).Row
+                End With
+                For i = 11 To LastRow
+                Range("G" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+'           Reajuste Area 2 - Nivel B
+                Range("I11").Select
+                Range(Selection, Selection.End(xlDown)).Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+             SkipBlanks:=False, Transpose:=False
+             Range("I11").Select
+             With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "I").End(xlUp).Row
+                End With
+                For i = 11 To LastRow
+                Range("I" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+'           Reajuste Area 3 - Nivel A
+                Range("L11").Select
+                Range(Selection, Selection.End(xlDown)).Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+             SkipBlanks:=False, Transpose:=False
+             Range("L11").Select
+             With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "L").End(xlUp).Row
+                End With
+                For i = 11 To LastRow
+                Range("L" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+'           Reajuste Area 3 - Nivel B
+                Range("N11").Select
+                Range(Selection, Selection.End(xlDown)).Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlMultiply, _
+             SkipBlanks:=False, Transpose:=False
+             Range("N11").Select
+             With ActiveSheet
+                    LastRow = .Cells(.Rows.count, "N").End(xlUp).Row
+                End With
+                For i = 11 To LastRow
+                Range("N" & i).Select
+                Selection.value = Application.WorksheetFunction.Round(ActiveCell.value, 2)
+                Next i
+            Application.CutCopyMode = False
+            Range("A1").Select
+        End If
+    Next
+    
+Exit Sub
+errosbx: Exit Sub ':MsgBox ("cancelado")
+Application.ScreenUpdating = True
+End Sub
