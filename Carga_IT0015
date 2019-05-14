@@ -1,6 +1,14 @@
 'Função para dar varga no IT0015
-'Exemplo de formula "=fcarga(A2;2662;B2;"10.05.2019")"
+'Exemplo de formula "=fcarga(A2;2662;B2;"10/05/2019")"
 
-Function fcarga(matricula, rubrica, valor, data)
-    fcarga = Format(matricula, "00000000") & rubrica & Format(valor, "0000000000.00") & data
+Function fZTHR0015(matricula As Long, rubrica As String, valor As Double, sdata As String) As String
+Dim mydate As Date
+Dim Arr() As String
+Arr = Split(sdata, "/")
+mydate = DateSerial(Year:=Arr(2), Month:=Arr(1), Day:=Arr(0))
+If valor >= 0 Then
+    fZTHR0015 = Format(matricula, "00000000") & Format(rubrica, "0000") & Format(valor, "0000000000.00") & Format(mydate, "dd.mm.yyyy")
+    Else
+    fZTHR0015 = Format(matricula, "00000000") & Format(rubrica, "0000") & Format(valor, "000000000.00") & Format(mydate, "dd.mm.yyyy")
+End If
 End Function

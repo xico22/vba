@@ -1,0 +1,53 @@
+Function FillSpace(nPar As Variant, nOccurs As Integer) _
+             As String
+    ' Author:                     Date:               Contact:
+    ' André Bernardes             20/06/2012 11:50    bernardess@gmail.com     https://sites.google.com/site/bernardescvcurriculumvitae/
+    ' Preenche com espaços.
+
+    Dim nSize As Integer
+    Dim nParticle As String
+    
+    Let nSize = Len(Trim(nPar))
+    L_R = False
+    ' Informa se será preenchido na frente (LEFT) ou atrás (RIGHT).
+    If L_R Then
+        Let nParticle = Space(nOccurs - nSize) & Trim(nPar)
+    Else
+        If nSize > 0 Then
+            Let nParticle = Trim(nPar) & Space(nOccurs - nSize)
+        Else
+            nParticle = Space(nOccurs)
+        End If
+    End If
+
+    Let FillSpace = nParticle
+End Function
+Public Function Pad(padchar As String, palavra As String, tamanho As Integer, DE As String) As String
+ Select Case DE
+    Case "E"
+        Pad = Right(String(tamanho, padchar) & palavra, tamanho)
+    Case "D"
+        Pad = Left(palavra & String(tamanho, padchar), tamanho)
+ End Select
+End Function
+
+Function FillZeros(nPar As Variant, nOccurs As Integer) As String
+    ' Author:                     Date:               Contact:
+    ' André Bernardes             20/06/2012 12:50    bernardess@gmail.com     https://sites.google.com/site/bernardescvcurriculumvitae/
+    ' Preenche com zeros.
+    
+    Dim nSize As Integer
+    Dim nParticle As String
+    
+    Let nSize = Len(Trim(nPar))
+    L_R = True
+    
+    If L_R Then
+        Let nParticle = Space(nOccurs - nSize) & Trim(nPar)
+    Else
+        Let nParticle = Trim(nPar) & Space(nOccurs - nSize)
+    End If
+    
+    Let FillZeros = Replace(nParticle, " ", "0")
+    
+End Function

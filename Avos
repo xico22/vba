@@ -1,0 +1,4 @@
+Function fAvos(begda As Date, enda As Date) As Integer
+ If (enda = 0 Or begda = 0 Or begda > enda) Then Return
+ fAvos = Month(enda) - IIf(Day(enda) < 15, 1, 0) - IIf(Year(enda) <> Year(begda), 0, (Month(begda) + IIf((WorksheetFunction.EoMonth(DateSerial(Year(enda), Month(begda), Day(begda)), 0) - DateSerial(Year(enda), Month(begda), Day(begda))) < 15, 1, 0)) - 1)
+End Function

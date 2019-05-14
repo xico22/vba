@@ -1,0 +1,30 @@
+Function contar(text As Variant) As Integer
+'Conta quantas palavras separadas por espaço tem na string
+
+Dim txt, str As String
+Dim count, i As Integer
+Dim delimiter As String
+
+delimiter = "/"
+
+'Manipula uma cópia da string
+txt = text
+
+'Tira espaços antes e depois
+txt = Application.Trim(txt)
+
+'Adiciona um espaço ao fim da string para formar uma palavra
+txt = txt & delimiter
+
+'Inicializa count e elemento
+count = 0
+str = ""
+
+'Conta cada palavra
+
+For i = 1 To Len(txt)
+If Mid(txt, i, 1) = delimiter Then count = count + 1
+
+Next i
+contar = count
+End Function

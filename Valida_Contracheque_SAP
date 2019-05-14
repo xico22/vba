@@ -1,0 +1,65 @@
+Public Sub checktest_contracheque_lista()
+
+Dim nome, categoria, mark As String
+Dim currentcell As Object
+Dim count As Long
+Dim sh, dados As Worksheet
+Dim matricula As Long
+Dim linha As Long
+
+count = 0
+Set dados = ActiveSheet()
+Set sh = Sheets.Add(After:=Sheets(Sheets.count))
+dados.Activate
+
+sh.Cells.Clear
+sh.Cells(1, 1) = "Matricula"
+sh.Cells(1, 2) = "Nome"
+sh.Cells(1, 3) = "Categoria"
+sh.Cells(1, 4) = "Rubrica"
+sh.Cells(1, 5) = "Desc Rubrica"
+sh.Cells(1, 6) = "Periodo"
+sh.Cells(1, 7) = "Qtd"
+sh.Cells(1, 8) = "Valor"
+linha = 2
+matricula = 0
+mark = "------------------------------------------------------------------------------"
+    For Each currentcell In Range("A:A")
+     If currentcell.value Like mark Then
+      count = count + 1
+      If count > 5 Then count = 1
+      GoTo nextint
+     End If
+     Select Case count
+      Case 1
+       'proxima_matricula
+       If Not CLng(Right(currentcell.value, 8)) Like matricula Then
+        matricula = CLng(Right(currentcell.value, 8))
+        nome = Left(currentcell.value, 43)
+        categoria = Right(currentcell.Offset(3, 0).value, Len(currentcell.Offset(3, 0)) - InStr(1, currentcell.Offset(3, 0).value, "|"))
+       End If
+       count = count + 1
+      Case 3
+       'rubricas
+       If currentcell.value Like "      Descrição                Período   Quant     Remunerações     Deduções" Then GoTo nextint
+       If Not ((Len(currentcell) = 61) Or (Len(currentcell) = 62) Or (Len(currentcell) = 76) Or (Len(currentcell) = 75)) Then GoTo nextint
+       sh.Cells(linha, 1) = matricula
+       sh.Cells(linha, 2) = nome
+       sh.Cells(linha, 3) = categoria
+       sh.Cells(linha, 4) = Left(currentcell.value, 5)
+       sh.Cells(linha, 5) = Mid(currentcell.value, 7, 24)
+       If Not Trim(Left(currentcell.value, 30)) Like "" Then sh.Cells(linha, 6) = Format(DateSerial(CInt(Mid(currentcell.value, 35, 4)), CInt(Mid(currentcell.value, 32, 2)), 1), "mm/yyyy") Else GoTo nextint
+       If Not Trim(Mid(currentcell.value, 43, 5)) Like "" Then sh.Cells(linha, 7) = CDbl(Mid(currentcell.value, 43, 5))
+       If (Len(currentcell) = 61 Or (Len(currentcell) = 62)) Then
+            sh.Cells(linha, 8) = CDbl(Right(currentcell.value, 10))
+        Else
+            sh.Cells(linha, 8) = -CDbl(Right(currentcell.value, 10))
+        End If
+        
+        linha = linha + 1
+     End Select
+nextint:
+    Next currentcell
+    
+    sh.Rows(linha).EntireRow.Delete
+End Sub

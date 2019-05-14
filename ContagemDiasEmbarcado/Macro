@@ -1,0 +1,235 @@
+Private Sub progress(pctCompl As Single)
+
+UserForm1.text.Caption = pctCompl & "% Completo"
+UserForm1.Bar.Width = pctCompl * 2
+
+DoEvents
+
+End Sub
+
+Sub ContagemDiasEmbarcado()
+    Dim myTable As ListObject
+    Dim myArray, subArray, matriculas As Variant
+    Dim X As Long
+    Dim matricula As String
+    Dim datacorte As Date
+    Dim dateVariable As Date
+    datacorte = CalendarForm.GetDate(SelectedDate:=Now(), OkayButton:=True)
+    'datacorte = CDate(Format("15/01/2019", "dd/mm/yyyy"))
+    
+    'Cria Planilhas Suporte
+    Call CriaPlan
+        
+    'Set path for Table variable
+    Set myTable = ActiveSheet.ListObjects("Table1")
+
+    'Create Array List from Table
+    myArray = myTable.DataBodyRange
+  
+     Sheets("Resumo").Select
+    'Cria Array de Matriculas
+    matriculas = Range("A2: A" + CStr(Cells(Rows.count, 1).End(xlUp).Row))
+    'matriculas = Range("A2: A6")
+    'Teste SOMENTE como breakpoint depois
+    'subArray = Filter2DArray(myArray, 1, "7985", False)
+    'MsgBox CalculaDias(subArray), , matricula
+    
+    For i = 1 To UBound(matriculas)
+
+        matricula = CStr(matriculas(i, 1))
+        Debug.Print matricula
+        'Procura subArray
+        subArray = Filter2DArray(myArray, 1, matricula, False)
+        'MsgBox "This is a message!", , "This is the Title"
+        'MsgBox CalculaDias(subArray), , matricula
+        
+        Range("D" + CStr(i + 1)).value = CalculaDias(subArray)
+        
+        navio = Range("G" + CStr(i + 1)).value
+        
+        If getInicio1x1.Exists(navio) Then
+            Range("H" + CStr(i + 1)).value = CDate(Format(getInicio1x1(navio), "dd/mm/yyyy"))
+            Range("K" + CStr(i + 1)).value = CStr(DateDiff("d", CDate(Format(getInicio1x1(navio), "dd/mm/yyyy")), datacorte) + 1)
+            If Range("D" + CStr(i + 1)).value <= Range("K" + CStr(i + 1)).value Then
+                    Range("E" + CStr(i + 1)).value = Range("D" + CStr(i + 1)).value
+                Else
+                    Range("E" + CStr(i + 1)).value = Range("K" + CStr(i + 1)).value
+            End If
+        Else
+            Range("H" + CStr(i + 1)).value = "NV NAO ENTROU NO 1x1/NAO CADASTRADO"
+            Range("E" + CStr(i + 1)).value = "NV NAO ENTROU NO 1x1/NAO CADASTRADO"
+            Range("K" + CStr(i + 1)).value = "NV NAO ENTROU NO 1x1/NAO CADASTRADO"
+        End If
+        
+        progress CSng(Int(i * 100 / UBound(matriculas)))
+        
+        'Loop through each item in Third Column of Table (displayed in Immediate Window [ctrl + g])
+        'For x = LBound(subArray) To UBound(subArray)
+        '    Debug.Print subArray(x, 5)
+        'Next x
+
+    Next i
+    
+ Unload UserForm1
+End Sub
+Public Function getInicio1x1() As Scripting.Dictionary
+    Static dict As Dictionary ' static: will keep state across different calls
+
+    If dict Is Nothing Then
+        Set dict = New Scripting.Dictionary
+        dict.Add Key:="NV AGARIBALDI", Item:="05/12/2018"
+        dict.Add Key:="NV ANASCIMENTO", Item:="20/12/2018"
+        dict.Add Key:="NV AREBOUÇAS", Item:="02/11/2018"
+        dict.Add Key:="NV AT ALVES", Item:="11/12/2017"
+        dict.Add Key:="NV BERGEN", Item:="07/05/2018"
+        dict.Add Key:="NV BLSOBRINHO", Item:="12/10/2018"
+        dict.Add Key:="NV CARTOLA", Item:="21/12/2017"
+        dict.Add Key:="NV CASTRO ALVES", Item:="02/11/2018"
+        dict.Add Key:="NV CDANDRADE", Item:="09/10/2018"
+        dict.Add Key:="NV CFURTADO", Item:="14/10/2018"
+        dict.Add Key:="NV DARCYRIBEIRO", Item:="12/10/2018"
+        dict.Add Key:="NV DILYA", Item:="26/10/2018"
+        dict.Add Key:="NV DIVA", Item:="10/06/2018"
+        dict.Add Key:="NV DRAGÃODOMAR", Item:="27/11/2018"
+        dict.Add Key:="NV GIL FREYRE", Item:="09/10/2018"
+        dict.Add Key:="NV GOTHENBURG", Item:="30/01/2018"
+        dict.Add Key:="NV GRAJAÚ", Item:="27/10/2018"
+        dict.Add Key:="NV GURUPÁ", Item:="21/10/2018"
+        dict.Add Key:="NV GURUPI", Item:="24/10/2018"
+        dict.Add Key:="NV HENRIQUEDIAS", Item:="15/12/2018"
+        dict.Add Key:="NV JALENCAR", Item:="07/06/2018"
+        dict.Add Key:="NV JCÂNDIDO", Item:="17/11/2018"
+        dict.Add Key:="NV JORGEAMADO", Item:="10/11/2018"
+        dict.Add Key:="NV JPATROCINIO", Item:="05/12/2018"
+        dict.Add Key:="NV LINDÓIA BR", Item:="28/02/2018"
+        dict.Add Key:="NV LIVRAMENTO", Item:="28/02/2018"
+        dict.Add Key:="NV LORENA BR", Item:="07/01/2019"
+        dict.Add Key:="NV LUCIO COSTA", Item:="02/11/2018"
+        dict.Add Key:="NV MACHADOASSIS", Item:="11/01/2019"
+        dict.Add Key:="NV MAÍSA", Item:="22/12/2018"
+        dict.Add Key:="NV MARCILIODIAS", Item:="07/01/2019"
+        dict.Add Key:="NV MARTA", Item:="08/06/2018"
+        dict.Add Key:="NV MILTONSANTOS", Item:="14/11/2018"
+        dict.Add Key:="NV NARA", Item:="27/11/2018"
+        dict.Add Key:="NV NEUSA", Item:="10/11/2018"
+        dict.Add Key:="NV NILZA", Item:="06/10/2018"
+        dict.Add Key:="NV NORMA", Item:="10/11/2018"
+        dict.Add Key:="NV OBILAC", Item:="22/12/2018"
+        dict.Add Key:="NV ONIEMEYER", Item:="02/10/2018"
+        dict.Add Key:="NV PEDREIRAS", Item:="27/12/2018"
+        dict.Add Key:="NV PIRAÍ", Item:="27/12/2018"
+        dict.Add Key:="NV PIRAJUÍ", Item:="27/12/2018"
+        dict.Add Key:="NV RALMEIDA", Item:="24/10/2018"
+        dict.Add Key:="NV SBHOLANDA", Item:="19/10/2018"
+        dict.Add Key:="NV STAVANGER", Item:="28/02/2018"
+        dict.Add Key:="NV ZPALMARES", Item:="18/01/2019"
+        dict.Add Key:="REB TANGARÁ", Item:="27/12/2018"
+    End If
+    Set getInicio1x1 = dict
+End Function
+
+
+Private Function CalculaDias(embarques As Variant) As Integer
+    Dim dias As Integer
+    Dim contador As Long
+    
+    dias = 0
+    If Left(embarques(UBound(embarques), 3), 12) = "Desembarcado" Then
+        CalculaDias = dias
+        Exit Function
+    End If
+    contador = UBound(embarques)
+    On Error GoTo Oops
+    While Left(embarques(contador, 3), 8) = "Embarque"
+        dias = dias + DateDiff("d", embarques(contador, 4), embarques(contador, 5)) + 1
+        contador = contador - 1
+    Wend
+    'n = DateDiff("d", embarques(1, 4), embarques(1, 5)) + 1
+    
+    CalculaDias = dias
+    Exit Function
+Oops:
+    If X = 0 Then CalculaDias = dias Else CalculaDias = 9999
+End Function
+Private Sub CriaPlan()
+    Dim LastRow As Long
+    
+    'Cria Base
+    ActiveSheet.Copy After:=Sheets(1)
+    ActiveSheet.Name = "Base"
+    
+    'CriaResumo
+    Sheets("Base").Copy After:=Sheets(2)
+    ActiveSheet.Name = "Resumo"
+    Range("A1").Select
+    LastRow = Cells(Rows.count, 1).End(xlUp).Row
+    
+    'Filtro para deixar somente um registro no resumo
+    Selection.AutoFilter
+    With ActiveSheet.AutoFilter.Sort
+        .SortFields.Clear
+        .SortFields.Add Key:=Range( _
+            "A2:A" + CStr(LastRow)), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+            xlSortNormal
+        .SortFields.Add Key:=Range( _
+            "E2:E" + CStr(LastRow)), SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:= _
+            xlSortNormal
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    
+    ActiveSheet.Range("$A$1:$I$" + CStr(LastRow)).RemoveDuplicates Columns:=1, Header:=xlYes
+    Columns(4).EntireColumn.Delete
+    Columns(4).EntireColumn.Delete
+    Range("D1").EntireColumn.Insert
+    Range("D1").value = "Dias Embarcado"
+    Range("D:D").NumberFormat = "0"
+    Range("G1").EntireColumn.Insert
+    Range("G1").value = "Inicio do NV no 1x1"
+    Range("G:G").NumberFormat = "dd/mm/yyyy"
+    Range("E1").EntireColumn.Insert
+    Range("E1").value = "Dias Embarcado no 1x1"
+    Range("E:E").NumberFormat = "0"
+    Range("K1").value = "Dias no 1x1"
+    Range("K:K").NumberFormat = "0"
+    ActiveSheet.Columns("A:K").AutoFit
+    Sheets("Base").Select
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range("$A$1:$I$" + CStr(LastRow)), , xlYes).Name = "Table1"
+    
+End Sub
+
+' credited to ndu
+Function Filter2DArray(ByVal sArray, ByVal ColIndex As Long, ByVal FindStr As String, ByVal HasTitle As Boolean)
+  Dim tmpArr, i As Long, j As Long, Arr, Dic, TmpStr, Tmp, Chk As Boolean, TmpVal As Double
+  On Error Resume Next
+  Set Dic = CreateObject("Scripting.Dictionary")
+  tmpArr = sArray
+  ColIndex = ColIndex + LBound(tmpArr, 2) - 1
+  Chk = (InStr("><=", Left(FindStr, 1)) > 0)
+  For i = LBound(tmpArr, 1) - HasTitle To UBound(tmpArr, 1)
+    If Chk Then
+      TmpVal = CDbl(tmpArr(i, ColIndex))
+      If Evaluate(TmpVal & FindStr) Then Dic.Add i, ""
+    Else
+      If UCase(tmpArr(i, ColIndex)) Like UCase(FindStr) Then Dic.Add i, ""
+    End If
+  Next
+  If Dic.count > 0 Then
+    Tmp = Dic.Keys
+    ReDim Arr(LBound(tmpArr, 1) To UBound(Tmp) + LBound(tmpArr, 1) - HasTitle, LBound(tmpArr, 2) To UBound(tmpArr, 2))
+    For i = LBound(tmpArr, 1) - HasTitle To UBound(Tmp) + LBound(tmpArr, 1) - HasTitle
+      For j = LBound(tmpArr, 2) To UBound(tmpArr, 2)
+        Arr(i, j) = tmpArr(Tmp(i - LBound(tmpArr, 1) + HasTitle), j)
+      Next
+    Next
+    If HasTitle Then
+      For j = LBound(tmpArr, 2) To UBound(tmpArr, 2)
+        Arr(LBound(tmpArr, 1), j) = tmpArr(LBound(tmpArr, 1), j)
+      Next
+    End If
+  End If
+  Filter2DArray = Arr
+End Function

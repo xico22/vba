@@ -1,0 +1,45 @@
+'Cria varias planilhas listadas na planilha1
+
+Sub relacionarplanilhas()
+'Criar variáveis
+Dim celula As Object
+Dim casa As Object
+Dim X As Double
+'Se encontrar erro vai para o rotulo Y no final do código
+On Error GoTo Y
+'Apagará o conteúdo e acrescentará o cabeçalho
+Sheets("Inicio").Range("A:A").ClearContents
+Sheets("Inicio").Range("A1") = "Relacionar Planilhas"
+'O contador inicia na planilha 2 visto que a planilha 1 é o local que receberá a relação de planilhas.
+X = 2
+'Percorre a coluna A da planilha inicio e quando encontrar uma célula em branco lançará o nome da planilha
+For Each celula In Sheets("Inicio").Range("A:A")
+    If celula = "" Then
+    celula = Worksheets(X).Name
+'Seleciona a celula e aplica o hiperlink
+      celula.Select
+      ActiveCell.Hyperlinks.Add Anchor:=Selection, Address:="", SubAddress:= _
+        Worksheets(X).Name & "!A1"
+    'Soma um ao contador para encontrar no nome da próxima planilha
+    X = X + 1
+Else
+End If
+'Vai para a próxima célula em branco
+Next
+'Ao terminar as planilhas finaliza o código.
+
+Y:
+    ActiveSheet.Next.Select
+    Range("L1").Select
+    ActiveSheet.Hyperlinks.Add Anchor:=Selection, Address:="", SubAddress:= _
+        "Inicio!A1", TextToDisplay:="Inicio!A1"
+    ActiveCell.FormulaR1C1 = "Voltar"
+    Range("L1").Select
+    Selection.Copy
+    For i = 2 To X
+     ActiveSheet.Next.Select
+     Range("L1").Select
+     ActiveSheet.Paste
+    Next i
+    
+End Sub

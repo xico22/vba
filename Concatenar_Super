@@ -1,0 +1,45 @@
+Option Explicit
+
+'Autor......: Fernando Couto Fernandes
+'Data.......: 03/08/2014 (dma)
+'Rotina.....: SuperConcatenar()
+'Parâmetros.: Celulas é um intervalo de células da planilha, pode ser uma ou mais
+'...........: Delimitador é o texto que vai ficar entre cada valor concatenado, pode ser omitido,
+'...........:       neste caso o valor padrão é vbNullString, ou seja, "", ou ainda, texto vazio
+'Descrição..: Esta função definida pelo usuário (UDF - User Defined Function) promete concatenar dados de um intervalo
+'...........: Usando um dado delimitador entre os valores das células
+
+Public Function SuperConcatenar(ByRef Celulas As Excel.Range, Optional ByVal Delimitador As String = vbNullString) As String
+On Error Resume Next
+Dim arrCelulas  As Variant
+Dim cntLin      As Long
+Dim cntCol      As Long
+   
+    'pega os dados do intervalo numa matriz
+    arrCelulas = Celulas.value
+   
+    If VBA.IsArray(arrCelulas) Then
+   
+        'se for matriz/array, concetene todos os valores
+        For cntLin = LBound(arrCelulas, 1) To UBound(arrCelulas, 1) Step 1
+            For cntCol = LBound(arrCelulas, 2) To UBound(arrCelulas, 2) Step 1
+           
+                SuperConcatenar = SuperConcatenar & Delimitador & arrCelulas(cntLin, cntCol)
+               
+            Next cntCol
+        Next cntLin
+       
+        'Se tudo deu certo, então a string SuperConcatenar tem como primeiro caractere o delimitador, o que não era o esperado.
+         'A linha abaixo resolve isso.
+       ' If VBA.Len(Delimitador) < 1 Then
+            SuperConcatenar = VBA.Trim(VBA.Right(SuperConcatenar, VBA.Len(SuperConcatenar) - VBA.Len(Delimitador)))
+       ' End If
+    Else
+        'caso contrário, devolva o valor da célula única
+        SuperConcatenar = Celulas.value
+    End If
+   
+    Erase arrCelulas
+    arrCelulas = Empty
+
+End Function

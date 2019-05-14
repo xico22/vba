@@ -1,0 +1,22 @@
+Function fDigitoMat(matricula As String) As String
+
+Dim resto As Integer
+Dim somab2, somab11 As Integer
+Dim termo, termob2 As Integer
+
+somab2 = 0
+
+For i = 0 To Len(matricula) - 1
+    termo = Mid(matricula, Len(matricula) - i, 1)
+    termob2 = termo * 2 ^ (i + 1)
+    somab2 = somab2 + termob2
+Next i
+
+somab11 = Int(somab2 / 11) * 11
+resto = somab2 - somab11
+
+If resto = 10 Then d3 = 0
+
+fDigitoMat = matricula & "-" & resto
+
+End Function

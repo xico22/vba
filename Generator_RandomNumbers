@@ -1,0 +1,54 @@
+Sub GerarNumerosAleatoriosSemRepeticao()
+Dim i                           As Integer
+Dim j                           As Integer
+Dim bRandomOk                   As Boolean
+Dim valor_aleatorio             As Integer
+Dim valor_maior                 As Integer
+Dim total_numeros_gerados       As Integer
+Dim total_numeros_para_gerar    As Integer
+Dim iControleGerar              As Integer
+Dim iColunaCelula               As Integer
+
+    valor_maior = 60    'Informe o maior número que poderá ser gerado
+    total_numeros_para_gerar = 20      'Informe a quantidade de números aleatórios que deseja gerar
+    total_numeros_gerados = 0
+    iLinhaCelulaInicial = 2     'Informe a linha da primeira célula que será escrito o número
+    iColunaCelula = 2   'Informe a coluna. Exemplo: Coluna B = 2
+    iControleGerar = total_numeros_para_gerar + iLinhaCelulaInicial - 1
+
+    'Gera quantos números forem indicados na variável 'total_numeros_gerados'
+    For i = iLinhaCelulaInicial To iControleGerar
+        total_numeros_gerados = total_numeros_gerados + 1
+
+        'Fica executando a geração de um novo número enquanto houver duplicidade
+        Do
+            'Utilize a condição abaixo para verificar se ainda existem números possíveis a serem gerados
+            'Porque se i for maior que o valor limite, significa que todos os números já saíram. Então, sai do loop
+            If valor_maior < total_numeros_gerados Then
+                valor_aleatorio = 0
+                bRandomOk = True
+                Exit Do
+            End If
+
+            'Gera um novo número
+            Randomize   'Sempre utilize esta função antes de chamar Rnd
+            valor_aleatorio = Int((valor_maior * Rnd) + 1)
+            bRandomOk = True
+
+            'Verifica se já saiu este número
+            For j = iLinhaCelulaInicial To i
+                If Cells(j, iColunaCelula).value = valor_aleatorio Then
+                    bRandomOk = False
+                    Exit For
+                End If
+            Next j
+
+        Loop While bRandomOk = False
+
+        'Escreve o número na célula
+        Cells(i, iColunaCelula).value = valor_aleatorio
+    Next i
+
+    MsgBox "Números Gerados", vbInformation
+
+End Sub
