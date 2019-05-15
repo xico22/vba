@@ -1,0 +1,128 @@
+'Busca	Nome	Gênero	E-mail	Ramal	Telefone Externo	Cedido Para	País	Imóvel	Lotação	Empresa de Origem	Matrícula	Cargo	Ênfase	Função	Lotação de Origem	Chave
+'rdep																
+
+
+Sub WebData()
+
+Dim wsDados As Worksheet
+Dim wsScrape As Worksheet
+Dim myURL As String
+
+Dim iForRow As Integer
+Dim iResultadosRow As Integer
+Dim iLastRow As Integer
+Dim iUltimaLinha As Integer
+Dim sCategoria As String
+
+Set wsDados = ThisWorkbook.Sheets("Dados")
+Set wsScrape = ThisWorkbook.Sheets("Scrape")
+
+Call OptimizeCode_Begin
+
+iLastRow = wsDados.Cells(wsDados.Rows.Count, "a").End(xlUp).Row
+
+For iForRow = 4 To iLastRow Step 1
+
+    wsScrape.Cells.Clear
+    
+    myURL = "http://localizadorpessoas.com.br/lope/busca/resultadoInterno.do?filtered=true&cleanAll=false&advanced=false&integracao=1&unico=" & wsDados.Cells(iForRow, "a").Value
+
+    With wsScrape.QueryTables.Add(Connection:= _
+    "URL;" & myURL, Destination:=wsScrape.Range("A1"))
+    .FieldNames = True
+    .RowNumbers = False
+    .FillAdjacentFormulas = False
+    .PreserveFormatting = True
+    .RefreshOnFileOpen = False
+    .BackgroundQuery = True
+    .RefreshStyle = xlOverwriteCells
+    .SavePassword = False
+    .SaveData = True
+    .AdjustColumnWidth = True
+    .RefreshPeriod = 0
+    .WebSelectionType = xlEntirePage
+    .WebFormatting = xlWebFormattingNone
+    .WebPreFormattedTextToColumns = True
+    .WebConsecutiveDelimitersAsOne = True
+    .WebSingleBlockTextImport = False
+    .WebDisableDateRecognition = False
+    .WebDisableRedirections = False
+    .Refresh BackgroundQuery:=False
+    End With
+   
+    'nome
+    wsDados.Cells(iForRow, "b").Value = wsScrape.Cells(13, "a").Value
+    
+   
+    For iResultadosRow = 10 To 50 Step 1
+   
+        Select Case wsScrape.Cells(iResultadosRow, "a").Value
+            
+            Case "Gênero:"
+                wsDados.Cells(iForRow, "c").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "E-mail:"
+                wsDados.Cells(iForRow, "d").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Telefone / Ramal:"
+                wsDados.Cells(iForRow, "e").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Telefone Externo:"
+                wsDados.Cells(iForRow, "f").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Cedido para:"
+                wsDados.Cells(iForRow, "g").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "País:"
+                wsDados.Cells(iForRow, "h").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Imóvel:"
+                wsDados.Cells(iForRow, "i").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Lotação:"
+                wsDados.Cells(iForRow, "j").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Empresa de Origem:"
+                wsDados.Cells(iForRow, "k").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Matrícula:"
+                wsDados.Cells(iForRow, "l").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Cargo:"
+                wsDados.Cells(iForRow, "m").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Ênfase:"
+                wsDados.Cells(iForRow, "n").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Função:"
+                wsDados.Cells(iForRow, "o").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Lotação de Origem:"
+                wsDados.Cells(iForRow, "p").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+            Case "Chave:"
+                wsDados.Cells(iForRow, "q").Value = wsScrape.Cells(iResultadosRow + 1, "a").Value
+        End Select
+    
+    Next iResultadosRow
+
+Next iForRow
+
+Call OptimizeCode_End
+
+MsgBox "Feito!"
+
+End Sub
+
+Sub OptimizeCode_Begin()
+
+Application.ScreenUpdating = False
+
+EventState = Application.EnableEvents
+Application.EnableEvents = False
+
+CalcState = Application.Calculation
+Application.Calculation = xlCalculationManual
+
+PageBreakState = ActiveSheet.DisplayPageBreaks
+ActiveSheet.DisplayPageBreaks = False
+
+End Sub
+
+Sub OptimizeCode_End()
+
+ActiveSheet.DisplayPageBreaks = PageBreakState
+Application.Calculation = CalcState
+Application.EnableEvents = EventState
+Application.ScreenUpdating = True
+
+Application.Calculation = xlAutomatic
+Application.EnableEvents = True
+
+End Sub
