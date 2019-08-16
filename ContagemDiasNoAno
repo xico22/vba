@@ -1,0 +1,25 @@
+Function DiasNoAno(inicio As Date, fim As Date, ano As Integer) As Long
+    
+    PriDiaAno = "1/1/" & ano
+    UltDiaAno = "31/12/" & ano
+    
+    If inicio > UltDiaAno Or fim < PriDiaAno Then
+        DiasNoAno = 0
+    Else
+        If inicio > PriDiaAno And fim < UltDiaAno Then
+            DiasNoAno = DateDiff("d", inicio, fim) + 1
+        Else
+            If inicio < PriDiaAno Then
+                If fim < UltDiaAno Then
+                    DiasNoAno = DateDiff("d", PriDiaAno, fim) + 1
+                Else: DiasNoAno = DateDiff("d", PriDiaAno, UltDiaAno) + 1
+                End If
+            Else
+                If fim > UltDiaAno Then
+                     DiasNoAno = DateDiff("d", inicio, UltDiaAno) + 1
+                    Else: DiasNoAno = DateDiff("d", PriDiaAno, UltDiaAno) + 1
+                End If
+            End If
+        End If
+     End If
+End Function
