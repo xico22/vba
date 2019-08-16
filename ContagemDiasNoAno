@@ -6,7 +6,7 @@ Function DiasNoAno(inicio As Date, fim As Date, ano As Integer) As Long
     If inicio > UltDiaAno Or fim < PriDiaAno Then
         DiasNoAno = 0
     Else
-        If inicio > PriDiaAno And fim < UltDiaAno Then
+        If inicio >= PriDiaAno And fim <= UltDiaAno Then
             DiasNoAno = DateDiff("d", inicio, fim) + 1
         Else
             If inicio < PriDiaAno Then
