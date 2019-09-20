@@ -1,0 +1,30 @@
+Sub SAP_9LRET()
+    Dim ws, wr As Worksheet
+    Dim i As Long
+    Dim LastRow As Long
+    Set ws = ActiveSheet
+    Set wr = Sheets.Add
+    LastRow = ws.Range("A:A").SpecialCells(xlCellTypeLastCell).Row
+    For i = 1 To LastRow
+        Let srange = "A" & i & ":" & "J" & i
+        Application.CutCopyMode = False
+        ws.Range(srange).Copy
+        If (i Mod 2) = 0 Then Let srange = "K" & i - 1 & ":" & "T" & i - 1
+        wr.Range(srange).PasteSpecial xlPasteAll
+    Next i
+    wr.Range("A:A").Select
+    Selection.SpecialCells(xlCellTypeBlanks).EntireRow.Delete
+    Call Delete_Columns
+End Sub
+
+Sub Delete_Columns()
+
+Dim C As Integer
+C = ActiveSheet.Cells.SpecialCells(xlLastCell).Column
+
+Do Until C = 0
+    If WorksheetFunction.CountA(Columns(C)) = 0 Then Columns(C).Delete
+    C = C - 1
+Loop
+
+End Sub
