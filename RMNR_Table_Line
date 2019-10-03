@@ -7,13 +7,15 @@ Dim cwb, cws As Range
 Dim WS_Count As Integer
 Dim B As Integer
 
-WS_Count = ActiveWorkbook.Worksheets.count
+Set wb = ActiveWorkbook.Worksheets.Add
 
-Set wb = ActiveWorkbook.Worksheets("Planilha2")
+wb.Name = "resumo SAP"
 
-For B = 2 To WS_Count
+WS_Count = ActiveWorkbook.Worksheets.Count
+For B = 1 To WS_Count
     Sheets(B).Select
     Set ws = ActiveWorkbook.ActiveSheet
+    If ws.Name = "resumo SAP" Or ws.Name = "Tabela Salarial ACT" Then GoTo NextIteration
     Set cws = ws.Range("A11")
     Dim LastRow As Long
     With ws
@@ -44,9 +46,21 @@ For B = 2 To WS_Count
         cwb.Offset(i + LastRow + 1, 4) = cws.Offset(i, 5)
         cwb.Offset(i + LastRow + 1, 5) = cws.Offset(i, 8)
     Next
-      
+NextIteration:
     ws.Activate
 
+Next
+
+wb.Activate
+Columns("D:D").Select
+Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+LastRow = WorksheetFunction.CountA(wb.Range("A:A"))
+For aux = 1 To LastRow
+    nivel = Range("A" & aux)
+    faixa = Range("B" & aux)
+    regime = WorksheetFunction.Substitute(Range("C" & aux), "NM ", "")
+    regime = WorksheetFunction.Substitute(Range("C" & aux), "NS ", "")
+    Range("D" & aux).Value = nivel & "|" & faixa & "|" & regime
 Next
 
 End Sub
