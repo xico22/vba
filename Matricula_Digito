@@ -15,7 +15,7 @@ Next i
 somab11 = Int(somab2 / 11) * 11
 resto = somab2 - somab11
 
-If resto = 10 Then d3 = 0
+If resto = 10 Then resto = 0
 
 fDigitoMat = matricula & "-" & resto
 
